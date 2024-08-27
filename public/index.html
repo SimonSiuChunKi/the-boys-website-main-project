@@ -5,6 +5,7 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
+    <title>Main Page</title>
     <meta
       name="description"
       content="Web site created using create-react-app"
@@ -29,6 +30,33 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <div id="content">
+        <button class="openbtn" onclick="toggleNav()">☰</button>
+        <div class="header">
+            <h1>Auslan Hand Sign Learning</h1>
+            <p>Improving the Quality of Hand Sign Learning One at a time </p>
+            <button class="cta-button" onclick="window.location.href='course.html'">Start Now</button>
+        </div>
+        <div class="services">
+            <div class="service">
+                <h2>Explore Our Course</h2>
+                <p>A machine learning model that will recognize the hand sign you made, making sure that you are on the right path</p>
+                <button class="cta-button" onclick="window.location.href='course.html'">Start Now</button>
+            </div>
+            <div class="service">
+                <h2>Getting More Insight</h2>
+                <p>Learn more about the current situation of Auslan, and the population of the disabled population</p>
+                <button class="cta-button" onclick="window.location.href='insight.html'">Click here!</button>
+            </div>
+            <div class="service">
+                <h2>About Us</h2>
+                <p>Want to know more about us and what we do?</p>
+                <p>Find out more!</p>
+                <p> </p>
+                <button class="cta-button" onclick="window.location.href='about.html'">About</button>
+            </div>
+        </div>
+    </div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
