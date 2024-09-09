@@ -52,6 +52,8 @@ function getCurrentChapterFromURL() {
         return 4;
     } else if (page === 'chapter5.html') {
         return 5;
+    } else if (page === 'chapter6.html') {
+        return 6;
     } else {
         return null;  // If no match, return null
     }
@@ -195,6 +197,9 @@ function interpretONNXOutput(results) {
         case 5:
             letters = ['U', 'V', 'W', 'X', 'Y', 'Z'];
             break;
+        case 6:
+            letters = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            break; 
         default:
             console.error('Error: Unable to determine current chapter');
             return;
@@ -326,6 +331,87 @@ function changeVideo(letter) {
             break;
         case 'Zz':
             videoSource.src = './assets/videos/Z.mp4';
+            break;
+        case '1':
+            videoSource.src = './assets/videos/1.mp4';
+            break;
+        case '2':
+            videoSource.src = './assets/videos/2.mp4';
+            break;
+        case '3':
+            videoSource.src = './assets/videos/3.mp4';
+            break;
+        case '4':
+            videoSource.src = './assets/videos/4.mp4';
+            break;
+        case '5':
+            videoSource.src = './assets/videos/5.mp4';
+            break;
+        case '6':
+            videoSource.src = './assets/videos/6.mp4';
+            break;
+        case '7':
+            videoSource.src = './assets/videos/7.mp4';
+            break;
+        case '8':
+            videoSource.src = './assets/videos/8.mp4';
+            break;
+        case '9':
+            videoSource.src = './assets/videos/9.mp4';
+            break;
+    case '1':
+            videoSource.src = './assets/videos/1.mp4';
+            break;
+        case '2':
+            videoSource.src = './assets/videos/2.mp4';
+            break;
+        case '3':
+            videoSource.src = './assets/videos/3.mp4';
+            break;
+        case '4':
+            videoSource.src = './assets/videos/4.mp4';
+            break;
+        case '5':
+            videoSource.src = './assets/videos/5.mp4';
+            break;
+        case '6':
+            videoSource.src = './assets/videos/6.mp4';
+            break;
+        case '7':
+            videoSource.src = './assets/videos/7.mp4';
+            break;
+        case '8':
+            videoSource.src = './assets/videos/8.mp4';
+            break;
+        case '9':
+            videoSource.src = './assets/videos/9.mp4';
+            break;
+        case '1':
+            videoSource.src = './assets/videos/1.mp4';
+            break;
+        case '2':
+            videoSource.src = './assets/videos/2.mp4';
+            break;
+        case '3':
+            videoSource.src = './assets/videos/3.mp4';
+            break;
+        case '4':
+            videoSource.src = './assets/videos/4.mp4';
+            break;
+        case '5':
+            videoSource.src = './assets/videos/5.mp4';
+            break;
+        case '6':
+            videoSource.src = './assets/videos/6.mp4';
+            break;
+        case '7':
+            videoSource.src = './assets/videos/7.mp4';
+            break;
+        case '8':
+            videoSource.src = './assets/videos/8.mp4';
+            break;
+        case '9':
+            videoSource.src = './assets/videos/9.mp4';
             break;
         default:
             videoSource.src = './assets/videos/A.mp4';  // Default to Aa video if no match
