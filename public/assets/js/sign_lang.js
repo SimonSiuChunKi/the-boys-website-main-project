@@ -10,7 +10,7 @@ let sequence = [];
 
 // Load the ONNX model
 async function loadONNXModel() {
-    session = await ort.InferenceSession.create('./assets/models/model.onnx');
+    session = await ort.InferenceSession.create('../assets/models/model.onnx');
     console.log("ONNX Model loaded successfully!");
 }
 
@@ -199,7 +199,7 @@ function interpretONNXOutput(results) {
             break;
         case 6:
             letters = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
-            break; 
+            break;    
         default:
             console.error('Error: Unable to determine current chapter');
             return;
@@ -255,166 +255,112 @@ function changeVideo(letter) {
     
     switch (letter) {
         case 'Aa':
-            videoSource.src = './assets/videos/A.mp4';
+            videoSource.src = '../assets/videos/A.mp4';
             break;
         case 'Bb':
-            videoSource.src = './assets/videos/B.mp4';
+            videoSource.src = '../assets/videos/B.mp4';
             break;
         case 'Cc':
-            videoSource.src = './assets/videos/C.mp4';
+            videoSource.src = '../assets/videos/C.mp4';
             break;
         case 'Dd':
-            videoSource.src = './assets/videos/D.mp4';
+            videoSource.src = '../assets/videos/D.mp4';
             break;
         case 'Ee':
-            videoSource.src = './assets/videos/E.mp4';
+            videoSource.src = '../assets/videos/E.mp4';
             break;
         case 'Ff':
-            videoSource.src = './assets/videos/F.mp4';
+            videoSource.src = '../assets/videos/F.mp4';
             break;
         case 'Gg':
-            videoSource.src = './assets/videos/G.mp4';
+            videoSource.src = '../assets/videos/G.mp4';
             break;
         case 'Hh':
-            videoSource.src = './assets/videos/H.mp4';
+            videoSource.src = '../assets/videos/H.mp4';
             break;
         case 'Ii':
-            videoSource.src = './assets/videos/I.mp4';
+            videoSource.src = '../assets/videos/I.mp4';
             break;
         case 'Jj':
-            videoSource.src = './assets/videos/J.mp4';
+            videoSource.src = '../assets/videos/J.mp4';
             break;
         case 'Kk':
-            videoSource.src = './assets/videos/K.mp4';
+            videoSource.src = '../assets/videos/K.mp4';
             break;
         case 'Ll':
-            videoSource.src = './assets/videos/L.mp4';
+            videoSource.src = '../assets/videos/L.mp4';
             break;
         case 'Mm':
-            videoSource.src = './assets/videos/M.mp4';
+            videoSource.src = '../assets/videos/M.mp4';
             break;
         case 'Nn':
-            videoSource.src = './assets/videos/N.mp4';
+            videoSource.src = '../assets/videos/N.mp4';
             break;
         case 'Oo':
-            videoSource.src = './assets/videos/O.mp4';
+            videoSource.src = '../assets/videos/O.mp4';
             break;
         case 'Pp':
-            videoSource.src = './assets/videos/P.mp4';
+            videoSource.src = '../assets/videos/P.mp4';
             break;
         case 'Qq':
-            videoSource.src = './assets/videos/Q.mp4';
+            videoSource.src = '../assets/videos/Q.mp4';
             break;
         case 'Rr':
-            videoSource.src = './assets/videos/R.mp4';
+            videoSource.src = '../assets/videos/R.mp4';
             break;
         case 'Ss':
-            videoSource.src = './assets/videos/S.mp4';
+            videoSource.src = '../assets/videos/S.mp4';
             break;
         case 'Tt':
-            videoSource.src = './assets/videos/T.mp4';
+            videoSource.src = '../assets/videos/T.mp4';
             break;
         case 'Uu':
-            videoSource.src = './assets/videos/U.mp4';
+            videoSource.src = '../assets/videos/U.mp4';
             break;
         case 'Vv':
-            videoSource.src = './assets/videos/V.mp4';
+            videoSource.src = '../assets/videos/V.mp4';
             break;
         case 'Ww':
-            videoSource.src = './assets/videos/W.mp4';
+            videoSource.src = '../assets/videos/W.mp4';
             break;
         case 'Xx':
-            videoSource.src = './assets/videos/X.mp4';
+            videoSource.src = '../assets/videos/X.mp4';
             break;
         case 'Yy':
-            videoSource.src = './assets/videos/Y.mp4';
+            videoSource.src = '../assets/videos/Y.mp4';
             break;
         case 'Zz':
-            videoSource.src = './assets/videos/Z.mp4';
+            videoSource.src = '../assets/videos/Z.mp4';
             break;
         case '1':
-            videoSource.src = './assets/videos/1.mp4';
+            videoSource.src = '../assets/videos/1.mp4';
             break;
         case '2':
-            videoSource.src = './assets/videos/2.mp4';
+            videoSource.src = '../assets/videos/2.mp4';
             break;
         case '3':
-            videoSource.src = './assets/videos/3.mp4';
+            videoSource.src = '../assets/videos/3.mp4';
             break;
         case '4':
-            videoSource.src = './assets/videos/4.mp4';
+            videoSource.src = '../assets/videos/4.mp4';
             break;
         case '5':
-            videoSource.src = './assets/videos/5.mp4';
+            videoSource.src = '../assets/videos/5.mp4';
             break;
         case '6':
-            videoSource.src = './assets/videos/6.mp4';
+            videoSource.src = '../assets/videos/6.mp4';
             break;
         case '7':
-            videoSource.src = './assets/videos/7.mp4';
+            videoSource.src = '../assets/videos/7.mp4';
             break;
         case '8':
-            videoSource.src = './assets/videos/8.mp4';
+            videoSource.src = '../assets/videos/8.mp4';
             break;
         case '9':
-            videoSource.src = './assets/videos/9.mp4';
-            break;
-    case '1':
-            videoSource.src = './assets/videos/1.mp4';
-            break;
-        case '2':
-            videoSource.src = './assets/videos/2.mp4';
-            break;
-        case '3':
-            videoSource.src = './assets/videos/3.mp4';
-            break;
-        case '4':
-            videoSource.src = './assets/videos/4.mp4';
-            break;
-        case '5':
-            videoSource.src = './assets/videos/5.mp4';
-            break;
-        case '6':
-            videoSource.src = './assets/videos/6.mp4';
-            break;
-        case '7':
-            videoSource.src = './assets/videos/7.mp4';
-            break;
-        case '8':
-            videoSource.src = './assets/videos/8.mp4';
-            break;
-        case '9':
-            videoSource.src = './assets/videos/9.mp4';
-            break;
-        case '1':
-            videoSource.src = './assets/videos/1.mp4';
-            break;
-        case '2':
-            videoSource.src = './assets/videos/2.mp4';
-            break;
-        case '3':
-            videoSource.src = './assets/videos/3.mp4';
-            break;
-        case '4':
-            videoSource.src = './assets/videos/4.mp4';
-            break;
-        case '5':
-            videoSource.src = './assets/videos/5.mp4';
-            break;
-        case '6':
-            videoSource.src = './assets/videos/6.mp4';
-            break;
-        case '7':
-            videoSource.src = './assets/videos/7.mp4';
-            break;
-        case '8':
-            videoSource.src = './assets/videos/8.mp4';
-            break;
-        case '9':
-            videoSource.src = './assets/videos/9.mp4';
+            videoSource.src = '../assets/videos/9.mp4';
             break;
         default:
-            videoSource.src = './assets/videos/A.mp4';  // Default to Aa video if no match
+            videoSource.src = '../assets/videos/A.mp4';  // Default to Aa video if no match
     }
 
     videoSource.load();  // Reload the video so it updates on the webpage
