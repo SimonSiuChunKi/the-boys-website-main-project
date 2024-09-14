@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     // Fetch the data from the API
-    fetch('https://apqq86932h.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1/lessons/')
+    fetch('https://lnenem9b6b.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1/lessons/')
     .then(response => response.json())
     .then(data => {
         // Select the container where courses will be inserted
