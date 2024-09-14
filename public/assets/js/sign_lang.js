@@ -37,6 +37,29 @@ const camera = new Camera(videoElement, {
     height: 480
 });
 
+// Determine the current chapter from the URL
+function getCurrentChapterFromURL() {
+    const path = window.location.pathname;  // Get the current URL path
+    const page = path.split("/").pop();  // Get the last part of the path, i.e., the HTML file name
+    
+    if (page === 'chapter1.html') {
+        return 1;
+    } else if (page === 'chapter2.html') {
+        return 2;
+    } else if (page === 'chapter3.html') {
+        return 3;
+    } else if (page === 'chapter4.html') {
+        return 4;
+    } else if (page === 'chapter5.html') {
+        return 5;
+    } else if (page === 'chapter6.html') {
+        return 6;
+    } else {
+        return null;  // If no match, return null
+    }
+}
+
+// Process Mediapipe results and extract keypoints
 function onResults(results) {
     const keypoints = [];
 
@@ -96,7 +119,6 @@ function onResults(results) {
     }
 }
 
-
 // Run predictions using ONNX model with 30 frames of keypoints
 async function runPrediction() {
     if (!session) {
@@ -129,8 +151,7 @@ async function runPrediction() {
     }
 }
 
-// Interpret ONNX model output
-// Interpret ONNX model output
+// Interpret ONNX model output dynamically based on the chapter
 function interpretONNXOutput(results) {
     console.log("Model output:", results);  // Log the entire output
 
@@ -155,10 +176,38 @@ function interpretONNXOutput(results) {
 
     console.log("Model output data:", outputData);
 
+    // Get the current chapter
+    const currentChapter = getCurrentChapterFromURL();
+    let letters;
+
+    // Dynamically adjust letters array based on the chapter
+    switch (currentChapter) {
+        case 1:
+            letters = ['A', 'B', 'C', 'D'];
+            break;
+        case 2:
+            letters = ['E', 'F', 'G', 'H'];
+            break;
+        case 3:
+            letters = ['I', 'J', 'K', 'L', 'M', 'N'];
+            break;
+        case 4:
+            letters = ['O', 'P', 'Q', 'R', 'S', 'T'];
+            break;
+        case 5:
+            letters = ['U', 'V', 'W', 'X', 'Y', 'Z'];
+            break;
+        case 6:
+            letters = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            break;    
+        default:
+            console.error('Error: Unable to determine current chapter');
+            return;
+    }
+
     // Assuming outputData contains the prediction probabilities for each class
     const maxIndex = outputData.indexOf(Math.max(...outputData));  // Get index of highest probability
 
-    const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];  // Adjust based on your model's classes
     console.log('Predicted letter index:', maxIndex, 'Predicted letter:', letters[maxIndex]);  // Log predicted letter
     return letters[maxIndex];
 }
@@ -204,34 +253,21 @@ startCameraAndRunModel();
 function changeVideo(letter) {
     const videoSource = document.getElementById('sign-video');
     
-    switch (letter) {
-        case 'Aa':
-            videoSource.src = './assets/videos/A.mp4';
-            break;
-        case 'Bb':
-            videoSource.src = './assets/videos/B.mp4';
-            break;
-        case 'Cc':
-            videoSource.src = './assets/videos/C.mp4';
-            break;
-        case 'Dd':
-            videoSource.src = './assets/videos/D.mp4';
-            break;
-        case 'Ee':
-            videoSource.src = './assets/videos/E.mp4';
-            break;
-        case 'Ff':
-            videoSource.src = './assets/videos/F.mp4';
-            break;
-        case 'Gg':
-            videoSource.src = './assets/videos/G.mp4';
-            break;
-        case 'Hh':
-            videoSource.src = './assets/videos/H.mp4';
-            break;
-        default:
-            videoSource.src = './assets/videos/A.mp4';  // Default to Aa video if no match
-    }
-
-    videoSource.load();  // Reload the video so it updates on the webpage
+    // Fetch the video from the API using the letter directly
+    fetch(`https://apqq86932h.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1/resources/videos?auslan_sign=${letter}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Video not found');
+            }
+            return response.json();  // The API returns a JSON array containing the video URL
+        })
+        .then(videoUrlArray => {
+            const videoUrl = videoUrlArray[0];  // Since it's an array, we access the first (and only) URL
+            videoSource.src = videoUrl;  // Set the video source to the fetched video URL
+            videoSource.load();  // Reload the video to update on the webpage
+        })
+        .catch(error => {
+            console.error('Error fetching video:', error);
+            alert('Failed to load video for the selected hand sign.');
+        });
 }
