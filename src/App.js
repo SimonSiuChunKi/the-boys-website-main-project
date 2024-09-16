@@ -12,6 +12,7 @@ import Home from './pages/Home';
 import Contact from './pages/Contact';
 import DemoProduct from './pages/DemoProduct';
 import LessonDetail from './pages/LessonDetails';
+import NotFound from './pages/NotFound';
 
 import {useDocTitle} from './components/CustomHook';
 import ScrollToTop from './components/ScrollToTop';
@@ -42,6 +43,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/get-demo" element={<DemoProduct />} /> 
             <Route path="/lesson/:lesson_id" element={<LessonDetail />} />
+            <Route path='*' element={<NotFound />}/>
           </Routes>
         </ScrollToTop>
       </Router>
