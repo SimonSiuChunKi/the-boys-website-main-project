@@ -11,6 +11,7 @@ import {
 import Home from './pages/Home';
 import Contact from './pages/Contact';
 import DemoProduct from './pages/DemoProduct';
+import Lessons from './pages/Lessons';
 import LessonDetail from './pages/LessonDetails';
 import NotFound from './pages/NotFound';
 
@@ -42,6 +43,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/get-demo" element={<DemoProduct />} /> 
+            <Route path="/lessons/:course_id" element={<Lessons />} />
             <Route path="/lesson/:lesson_id" element={<LessonDetail />} />
             <Route path='*' element={<NotFound />}/>
           </Routes>
