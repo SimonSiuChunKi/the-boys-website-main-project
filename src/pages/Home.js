@@ -5,17 +5,21 @@ import Hero from '../components/Hero';
 import Intro from '../components/Intro';
 import Portfolio from '../components/Portfolio';
 import Courses from '../components/Courses';
+import { AuthProvider } from '../components/AuthContext';
+
 
 
 const Home = () => {
     return (
         <>
-            <Hero />
-            <Intro />
-            <Courses />
-            {/* <Portfolio /> */}
-            <Cta/>
-            <Footer />
+            <AuthProvider>
+                <Hero />
+                <Intro />
+                <Courses />
+                {/* <Portfolio /> */}
+                <Cta/>
+                <Footer />
+            </AuthProvider>
         </>
 
     )
