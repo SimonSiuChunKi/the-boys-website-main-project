@@ -8,8 +8,6 @@ const Lessons = () => {
 
     const { course_id } = useParams(); // Get the course_id from the route parameter
 
-
-
     const [lessons, setLessons] = useState([]);
 
     useEffect(() => {
@@ -29,7 +27,7 @@ const Lessons = () => {
                 <NavBar />
             </div>
 
-            <div id="lessons" className="bg-gray-100 py-12" >
+            <div id="lessons" className="bg-gray-100 py-12" style={{ marginTop: '64px' }}>
                 <section data-aos="zoom-in-down">
                     <div className="my-4 py-4">
                         <h2 className="my-2 text-center text-3xl text-blue-900 uppercase font-bold">lessons</h2>
