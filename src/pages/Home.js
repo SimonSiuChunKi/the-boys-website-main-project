@@ -3,7 +3,7 @@ import Cta from '../components/Cta';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 import Intro from '../components/Intro';
-import Portfolio from '../components/Portfolio';
+import SignLibrary from '../components/SignLibrary';
 import Courses from '../components/Courses';
 import { AuthProvider } from '../components/AuthContext';
 
@@ -16,7 +16,7 @@ const Home = () => {
                 <Hero />
                 <Intro />
                 <Courses />
-                {/* <Portfolio /> */}
+                <SignLibrary />
                 <Cta/>
                 <Footer />
             </AuthProvider>
