@@ -12,17 +12,13 @@ const Login = (props) => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [securityQuestion, setSecurityQuestion] = useState('');
-    const [securityAnswer, setSecurityAnswer] = useState('');
     const [errors, setErrors] = useState({});
 
     const validateForm = () => {
         let formErrors = {};
         if (!username) formErrors.username = 'Username is required';
         if (!password) formErrors.password = 'Password is required';
-        if (!securityQuestion) formErrors.securityQuestion = 'Please select a security question';
-        if (!securityAnswer) formErrors.securityAnswer = 'Security answer is required';
-        return formErrors;
+            return formErrors;
     };
 
     const clearErrors = () => {
@@ -32,8 +28,6 @@ const Login = (props) => {
     const clearInput = () => {
         setUsername('');
         setPassword('');
-        setSecurityQuestion('');
-        setSecurityAnswer('');
     };
 
     const handleSubmit = (e) => {
@@ -44,31 +38,38 @@ const Login = (props) => {
             return;
         }
 
-        let formData = new FormData();
-        formData.append('username', username);
-        formData.append('password', password);
-        formData.append('securityQuestion', securityQuestion);
-        formData.append('securityAnswer', securityAnswer);
+        const formData = {
+            username: username,
+            password: password
+        };
 
-        // axios({
-        //     method: 'post',
-        //     url: process.env.REACT_APP_REGISTER_API,
-        //     data: formData,
-        //     headers: {
-        //         'Content-Type': 'multipart/form-data',
-        //     },
-        // })
-        //     .then(function (response) {
-        //         Notiflix.Report.success('Success', response.data.message, 'Okay');
-        //         clearInput();
-        //     })
-        //     .catch(function (error) {
-        //         const { response } = error;
-        //         Notiflix.Report.failure('Error', response.data.message, 'Okay');
-        //         if (response.data.errors) {
-        //             setErrors(response.data.errors);
-        //         }
-        //     });
+        clearErrors();
+
+        axios({
+            method: 'post',
+            url: 'https://gznfhnqwr4.execute-api.ap-southeast-2.amazonaws.com/prod/login',
+            data: formData,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(function (response) {
+            if (response && response.data) {
+                Notiflix.Report.success('Success', response.data.message, 'Okay');
+                clearInput();
+            }
+        })
+        .catch(function (error) {
+            // Handle errors
+            if (error.response && error.response.data) {
+                Notiflix.Report.failure('Error', error.response.data.message, 'Okay');
+                if (error.response.data.errors) {
+                    setErrors(error.response.data.errors);
+                }
+            } else {
+                Notiflix.Report.failure('Error', 'Something went wrong', 'Okay');
+            }
+        });
     };
 
     return (
@@ -76,7 +77,7 @@ const Login = (props) => {
             <div>
                 <NavBar />
             </div>
-            <div id='login' className="mt-8 w-full bg-white py-12 lg:py-24" div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
+            <div id='login' className="mt-8 w-full bg-white py-12 lg:py-24" style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
                 <div className="my-4" data-aos="zoom-in">
                     <form onSubmit={handleSubmit} id="loginForm">
                         <div className="w-full bg-white p-8 my-4 md:px-12 lg:w-full lg:pl-30 lg:pr-30 mr-auto rounded-2xl shadow-2xl">
@@ -126,7 +127,7 @@ const Login = (props) => {
                                     id="submitBtn"
                                     className="uppercase text-sm font-bold tracking-wide bg-gray-500 hover:bg-blue-900 text-gray-100 p-3 rounded-lg w-full focus:outline-none focus:shadow-outline"
                                 >
-                                    Sign Up
+                                    Sign In
                                 </button>
                             </div>
                         </div>

@@ -44,31 +44,40 @@ const Register = (props) => {
             return;
         }
 
-        let formData = new FormData();
-        formData.append('username', username);
-        formData.append('password', password);
-        formData.append('securityQuestion', securityQuestion);
-        formData.append('securityAnswer', securityAnswer);
+        const formData = {
+            username: username,
+            password: password,
+            "custom:security-question": securityQuestion,  
+            "custom:security-answer": securityAnswer
+        };
 
-        // axios({
-        //     method: 'post',
-        //     url: process.env.REACT_APP_REGISTER_API,
-        //     data: formData,
-        //     headers: {
-        //         'Content-Type': 'multipart/form-data',
-        //     },
-        // })
-        //     .then(function (response) {
-        //         Notiflix.Report.success('Success', response.data.message, 'Okay');
-        //         clearInput();
-        //     })
-        //     .catch(function (error) {
-        //         const { response } = error;
-        //         Notiflix.Report.failure('Error', response.data.message, 'Okay');
-        //         if (response.data.errors) {
-        //             setErrors(response.data.errors);
-        //         }
-        //     });
+        clearErrors();
+
+        axios({
+            method: 'post',
+            url: 'https://gznfhnqwr4.execute-api.ap-southeast-2.amazonaws.com/prod/register',
+            data: formData,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(function (response) {
+            if (response && response.data) {
+                Notiflix.Report.success('Success', response.data.message, 'Okay');
+                clearInput();
+            }
+        })
+        .catch(function (error) {
+            // Handle errors
+            if (error.response && error.response.data) {
+                Notiflix.Report.failure('Error', error.response.data.message, 'Okay');
+                if (error.response.data.errors) {
+                    setErrors(error.response.data.errors);
+                }
+            } else {
+                Notiflix.Report.failure('Error', 'Something went wrong', 'Okay');
+            }
+        });
     };
 
     return (
@@ -76,7 +85,7 @@ const Register = (props) => {
             <div>
                 <NavBar />
             </div>
-            <div id='register' className="mt-8 w-full bg-white py-12 lg:py-24" div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
+            <div id='register' className="mt-8 w-full bg-white py-12 lg:py-24" style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
                 <div className="container mx-auto my-8 px-4 lg:px-20" data-aos="zoom-in">
                     <form onSubmit={handleSubmit} id="registerForm">
                         <div className="w-full bg-white p-8 my-4 md:px-12 lg:w-full lg:pl-20 lg:pr-40 mr-auto rounded-2xl shadow-2xl">
