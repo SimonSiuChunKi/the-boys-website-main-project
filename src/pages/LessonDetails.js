@@ -1,36 +1,187 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import NavBar from '../components/Navbar/NavBar';
 import Footer from '../components/Footer';
+import * as ort from 'onnxruntime-web';  // ONNX Runtime for running the model
+import { Camera } from '@mediapipe/camera_utils'; // Import Camera correctly from mediapipe
+import { Holistic } from '@mediapipe/holistic'; // Mediapipe Holistic import
 
 const LessonDetails = () => {
-  const { lesson_id } = useParams(); // Get the lesson_id from the route parameter
+  const { lesson_id } = useParams();
   const [auslanSigns, setAuslanSigns] = useState([]);
-  const [selectedSign, setSelectedSign] = useState(null); // Track the currently selected sign
+  const [selectedSign, setSelectedSign] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cameraStream, setCameraStream] = useState(null);
+  const [prediction, setPrediction] = useState('');
+  const videoRef = useRef(null); // Camera video reference
+  const sessionRef = useRef(null); // ONNX session reference
+  const sequenceRef = useRef([]); // Sequence of keypoints for prediction
+  const holisticInstance = useRef(null); // Ref for the holistic instance
+  const cameraInstance = useRef(null); // Ref for the camera instance
 
   useEffect(() => {
     // Fetch Auslan signs using the lesson_id from the route params
     const fetchSigns = async () => {
       const response = await fetch(`https://lnenem9b6b.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1/lessons/get_lesson_details?lesson_id=${lesson_id}`);
-      // const response = await fetch(`http://localhost:8000/api/v1/lessons/get_lesson_details?lesson_id=${lesson_id}`);
       const data = await response.json();
-      setAuslanSigns(data);  // Set the fetched signs to the state
-      setSelectedSign(data[0]); // Initially display the first sign
+      setAuslanSigns(data);
+      setSelectedSign(data[0]);
     };
     fetchSigns();
   }, [lesson_id]);
 
-  // Handle the "Test" button click
-  const handleTest = () => {
-    if (selectedSign) {
-      console.log(`Testing sign: ${selectedSign.auslan_sign}`);
-      console.log(`Video URL: ${selectedSign.video_url}`);
-      // Perform any other action here (e.g., redirect, display a message, etc.)
+  // Load the ONNX model
+  const loadONNXModel = async () => {
+    try {
+      const session = await ort.InferenceSession.create('/model.onnx'); // Adjust the path accordingly
+      sessionRef.current = session;
+      console.log("ONNX Model loaded successfully");
+    } catch (err) {
+      console.error('Failed to load the ONNX model:', err);
     }
   };
 
+  // Start the camera and feed the live stream into the video element
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      setCameraStream(stream);
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+
+      // Initialize Holistic for Mediapipe
+      const holistic = new Holistic({
+        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`,
+      });
+
+      holistic.setOptions({
+        modelComplexity: 1,
+        smoothLandmarks: true,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5,
+      });
+
+      holistic.onResults(onResults);
+      holisticInstance.current = holistic; // Save Holistic instance to ref
+
+      // Initialize and start the camera
+      const camera = new Camera(videoRef.current, {
+        onFrame: async () => {
+          if (holisticInstance.current && videoRef.current) {
+            await holistic.send({ image: videoRef.current });
+          }
+        },
+        width: 640,
+        height: 480,
+      });
+      cameraInstance.current = camera;
+      camera.start();
+    } catch (error) {
+      console.error('Error accessing the camera: ', error);
+    }
+  };
+
+  // Process Mediapipe results and extract keypoints
+  const onResults = (results) => {
+    const keypoints = [];
+
+    // Extract pose keypoints
+    if (results.poseLandmarks) {
+      results.poseLandmarks.forEach(landmark => keypoints.push(landmark.x, landmark.y, landmark.z, landmark.visibility));
+    }
+
+    // Extract face keypoints
+    if (results.faceLandmarks) {
+      results.faceLandmarks.forEach(landmark => keypoints.push(landmark.x, landmark.y, landmark.z));
+    }
+
+    // Extract left hand keypoints
+    if (results.leftHandLandmarks) {
+      results.leftHandLandmarks.forEach(landmark => keypoints.push(landmark.x, landmark.y, landmark.z));
+    }
+
+    // Extract right hand keypoints
+    if (results.rightHandLandmarks) {
+      results.rightHandLandmarks.forEach(landmark => keypoints.push(landmark.x, landmark.y, landmark.z));
+    }
+
+    // Add zeros if landmarks are missing
+    while (keypoints.length < 1662) {
+      keypoints.push(0); // Ensure length is always 1662 (consistent input size)
+    }
+
+    // Store keypoints
+    sequenceRef.current.push(keypoints);
+    if (sequenceRef.current.length > 30) {
+      sequenceRef.current.shift(); // Keep only the last 30 frames
+    }
+
+    // Run prediction when we have 30 frames of keypoints
+    if (sequenceRef.current.length === 30) {
+      runPrediction();
+    }
+  };
+
+  // Run the prediction using the ONNX model
+  const runPrediction = async () => {
+    if (!sessionRef.current) {
+      console.error('ONNX Model not loaded yet');
+      return;
+    }
+
+    // Flatten the sequence array and convert it to a Float32Array for ONNX model input
+    const inputTensor = new ort.Tensor('float32', new Float32Array(sequenceRef.current.flat()), [1, 30, sequenceRef.current[0].length]);
+
+    try {
+      const results = await sessionRef.current.run({ [sessionRef.current.inputNames[0]]: inputTensor });
+      const predictedLetter = interpretONNXOutput(results);
+      if (predictedLetter) {
+        setPrediction(predictedLetter);
+      }
+    } catch (error) {
+      console.error('Error running ONNX model:', error);
+    }
+  };
+
+
+  const interpretONNXOutput = (results) => {
+    const outputTensor = results['output_0'];
+    const outputData = outputTensor.data;
+  
+    const maxIndex = outputData.indexOf(Math.max(...outputData));
+  
+    // Assuming each object in auslanSigns contains an 'auslan_sign' property with the corresponding sign/letter
+    const letters = auslanSigns.map(sign => sign.auslan_sign); // Dynamically extract signs
+  
+    return letters[maxIndex] || ''; // Return the letter or an empty string if undefined
+  };
+
+  // Handle the "Test" button click (open modal, start camera)
+  const handleTest = async () => {
+    setIsModalOpen(true);
+    await loadONNXModel();
+    await startCamera();
+  };
+
+  // Cleanup: stop camera and holistic instance when closing modal
+  const closeModal = () => {
+    if (cameraStream) {
+      cameraStream.getTracks().forEach(track => track.stop());
+      setCameraStream(null);
+    }
+    if (holisticInstance.current) {
+      holisticInstance.current = null; // Clear holistic instance
+    }
+    if (cameraInstance.current) {
+      cameraInstance.current.stop(); // Stop the camera properly
+      cameraInstance.current = null;
+    }
+    setIsModalOpen(false);
+  };
+
   if (!auslanSigns.length) {
-    return <div>Loading...</div>;  // Show a loading state while the data is being fetched
+    return <div>Loading...</div>;
   }
 
   return (
@@ -41,8 +192,6 @@ const LessonDetails = () => {
         </div>
 
         <div className="container mx-auto">
-          {/* <h1 className="text-4xl font-bold mb-4">Auslan Signs</h1> */}
-
           {/* Display clickable list of all Auslan signs */}
           <div className="mb-4">
             <h2 className="text-2xl mb-2 font-bold">Choose a Sign:</h2>
@@ -91,6 +240,25 @@ const LessonDetails = () => {
           )}
         </div>
       </div>
+
+      {/* Modal for Camera Feed and Prediction */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg relative">
+            <h2 className="text-2xl mb-2 font-bold">Sign Language Prediction</h2>
+            <p>Allow access to camera for prediction.</p>
+            <video ref={videoRef} autoPlay muted className="w-full h-auto mb-4"></video>
+            <p>Prediction: {prediction}</p>
+            <button
+              onClick={closeModal}
+              className="absolute top-0 right-0 mt-2 mr-2 bg-red-500 text-white p-2 rounded"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </>
   );
