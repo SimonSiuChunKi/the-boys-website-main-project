@@ -16,8 +16,8 @@ const SignLibrary = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            // const response = await fetch('https://lnenem9b6b.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1/hand_signs/');
-            const response = await fetch('http://localhost:8000/api/v1/hand_signs/');
+            const response = await fetch('https://lnenem9b6b.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1/hand_signs/');
+            // const response = await fetch('http://localhost:8000/api/v1/hand_signs/');
             const data = await response.json();
             setSigns(data);
         };

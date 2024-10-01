@@ -10,8 +10,8 @@ const Sign = () => {
   useEffect(() => {
     // Fetch the single Auslan sign using the lesson_id from the route params
     const fetchSign = async () => {
-      // const response = await fetch(`https://lnenem9b6b.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1/lessons/get_lesson_details?lesson_id=${lesson_id}`);
-      const response = await fetch(`http://localhost:8000/api/v1/hand_signs/hand_sign?hand_sign=${hand_sign}`);
+      const response = await fetch(`https://lnenem9b6b.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1/hand_signs/hand_sign?hand_sign=${hand_sign}`);
+      // const response = await fetch(`http://localhost:8000/api/v1/hand_signs/hand_sign?hand_sign=${hand_sign}`);
       const data = await response.json();
       setSign(data[0]);  // Since the API returns one item, set it directly
     };
