@@ -8,7 +8,7 @@ import Notiflix from 'notiflix';
 
 
 const Register = (props) => {
-    useDocTitle('MLD | Molad e Konsult - Register');
+    useDocTitle('Sign-Connect - Register');
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

@@ -8,7 +8,7 @@ import Notiflix from 'notiflix';
 
 
 const Login = (props) => {
-    useDocTitle('MLD | Molad e Konsult - Register');
+    useDocTitle('Sign-Connect - Login');
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -56,7 +56,7 @@ const Login = (props) => {
         .then(function (response) {
             if (response && response.data) {
                 Notiflix.Report.success('Success', response.data.message, 'Okay');
-                clearInput();
+                window.location.href = 'https://master.d2acbfc96voj44.amplifyapp.com/';
             }
         })
         .catch(function (error) {
