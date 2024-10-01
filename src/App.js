@@ -10,7 +10,8 @@ import {
 // All pages
 import Home from './pages/Home';
 import Contact from './pages/Contact';
-import DemoProduct from './pages/DemoProduct';
+import Register from './pages/Register';
+import Login from './pages/Login';
 import Lessons from './pages/Lessons';
 import LessonDetail from './pages/LessonDetails';
 import NotFound from './pages/NotFound';
@@ -44,7 +45,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/get-demo" element={<DemoProduct />} /> 
+            <Route path="/register" element={<Register />} /> 
+            <Route path="/login" element={<Login />} /> 
             <Route path="/lessons/:course_id" element={<Lessons />} />
             <Route path="/lesson/:lesson_id" element={<LessonDetail />} />
             <Route path="/sign_library" element={<SignLibrary />} />
