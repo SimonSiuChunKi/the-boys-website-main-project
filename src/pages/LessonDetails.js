@@ -33,7 +33,7 @@ const LessonDetails = () => {
   // Load the ONNX model
   const loadONNXModel = async () => {
     try {
-      const session = await ort.InferenceSession.create('/model.onnx'); // Adjust the path accordingly
+      const session = await ort.InferenceSession.create('https://the-boys-bucket.s3.ap-southeast-2.amazonaws.com/models/model.onnx'); // Adjust the path accordingly
       sessionRef.current = session;
       console.log("ONNX Model loaded successfully");
     } catch (err) {
