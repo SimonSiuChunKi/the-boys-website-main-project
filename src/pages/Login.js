@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavBar from '../components/Navbar/NavBar';
 import Footer from '../components/Footer';
 import {useDocTitle} from '../components/CustomHook';
 import axios from 'axios';
-// import emailjs from 'emailjs-com';
+import { useNavigate } from 'react-router-dom';
+import { isAuthenticated } from '../components/Auth';
 import Notiflix from 'notiflix';
 
 
 const Login = (props) => {
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (isAuthenticated()) {
+            navigate('/');
+        }
+    }, [navigate]);
     useDocTitle('Sign-Connect - Login');
 
     const [username, setUsername] = useState('');
