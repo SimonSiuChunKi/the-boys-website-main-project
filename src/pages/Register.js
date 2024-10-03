@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import NavBar from '../components/Navbar/NavBar';
+import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import {useDocTitle} from '../components/CustomHook';
 import axios from 'axios';
 // import emailjs from 'emailjs-com';
 import Notiflix from 'notiflix';
+import { Link } from 'react-router-dom';
 
 
 const Register = (props) => {
     useDocTitle('Sign-Connect - Register');
+    const navigate = useNavigate();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -64,7 +67,8 @@ const Register = (props) => {
         .then(function (response) {
             if (response && response.data) {
                 Notiflix.Report.success('Success', response.data.message, 'Okay');
-                clearInput();
+                clearInput();          
+                navigate('/login');
             }
         })
         .catch(function (error) {
@@ -105,6 +109,7 @@ const Register = (props) => {
                                         onChange={(e) => {
                                             setUsername(e.target.value);
                                             clearErrors();
+                                            
                                         }}
                                     />
                                     {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
