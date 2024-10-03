@@ -55,14 +55,15 @@ const Login = (props) => {
         })
         .then(function (response) {
             if (response && response.data) {
-                const { accessToken, idToken, refreshToken } = JSON.parse(response.data.body);
-                // Token ahndling
+                const { accessToken, idToken, refreshToken } = response.data;
+
+                // Token hndling
                 localStorage.setItem('accessToken', accessToken);
                 localStorage.setItem('idToken', idToken);
                 localStorage.setItem('refreshToken', refreshToken);
 
                 Notiflix.Report.success('Success', response.data.message, 'Okay');
-                window.location.href = 'https://master.d2acbfc96voj44.amplifyapp.com/';
+                //window.location.href = 'https://master.d2acbfc96voj44.amplifyapp.com/';
             }
         })
         .catch(function (error) {

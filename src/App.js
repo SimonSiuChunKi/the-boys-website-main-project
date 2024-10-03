@@ -17,7 +17,7 @@ import LessonDetail from './pages/LessonDetails';
 import NotFound from './pages/NotFound';
 import SignLibrary from './pages/SignLibrary';
 import Signs from './pages/Sign';
-
+import ProtectedRoute from './components/ProtectedRoute';
 import {useDocTitle} from './components/CustomHook';
 import ScrollToTop from './components/ScrollToTop';
 
@@ -47,11 +47,25 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/register" element={<Register />} /> 
             <Route path="/login" element={<Login />} /> 
-            <Route path="/lessons/:course_id" element={<Lessons />} />
-            <Route path="/lesson/:lesson_id" element={<LessonDetail />} />
             <Route path="/sign_library" element={<SignLibrary />} />
             <Route path="/hand_sign/:hand_sign" element={<Signs />} />
             <Route path='*' element={<NotFound />}/>
+            <Route 
+              path="/lessons/:course_id" 
+              element={
+                <ProtectedRoute>
+                  <Lessons />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/lesson/:lesson_id" 
+              element={
+                <ProtectedRoute>
+                  <LessonDetail />
+                </ProtectedRoute>
+              } 
+            />
           </Routes>
         </ScrollToTop>
       </Router>
