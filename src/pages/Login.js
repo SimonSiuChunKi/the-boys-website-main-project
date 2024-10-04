@@ -5,7 +5,7 @@ import {useDocTitle} from '../components/CustomHook';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { isAuthenticated } from '../components/Auth';
-import Notiflix from 'notiflix';
+import { showSuccessReport, showFailureReport } from '../components/notiflixConfig';
 
 
 const Login = (props) => {
@@ -15,6 +15,7 @@ const Login = (props) => {
             navigate('/');
         }
     }, [navigate]);
+
     useDocTitle('Sign-Connect - Login');
 
     const [username, setUsername] = useState('');
@@ -69,19 +70,19 @@ const Login = (props) => {
                 localStorage.setItem('idToken', idToken);
                 localStorage.setItem('refreshToken', refreshToken);
 
-                Notiflix.Report.success('Success', response.data.message, 'Okay');
-                //window.location.href = 'https://master.d2acbfc96voj44.amplifyapp.com/';
+                showSuccessReport('Success', response.data.message);
+                navigate('/');
             }
         })
         .catch(function (error) {
             // Handle errors
             if (error.response && error.response.data) {
-                Notiflix.Report.failure('Error', error.response.data.message, 'Okay');
+                showFailureReport('Error', error.response.data.message);
                 if (error.response.data.errors) {
                     setErrors(error.response.data.errors);
                 }
             } else {
-                Notiflix.Report.failure('Error', 'Something went wrong', 'Okay');
+                showFailureReport('Error', 'Something went wrong');
             }
         });
     };
