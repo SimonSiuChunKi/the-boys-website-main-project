@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 import {useDocTitle} from '../components/CustomHook';
 import axios from 'axios';
 // import emailjs from 'emailjs-com';
-import { showSuccessReport, showFailureReport } from '../components/notiflixConfig';
+import { showSuccessReport } from '../components/notiflixConfig';
 import { isAuthenticated } from '../components/Auth';
 
 const Register = (props) => {
@@ -22,11 +22,21 @@ const Register = (props) => {
     const [securityQuestion, setSecurityQuestion] = useState('');
     const [securityAnswer, setSecurityAnswer] = useState('');
     const [errors, setErrors] = useState({});
+    const [apiErrorMessage, setApiErrorMessage] = useState('');
+
+    const isValidPassword = (password) => {
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
+        return passwordRegex.test(password);
+    };
 
     const validateForm = () => {
         let formErrors = {};
         if (!username) formErrors.username = 'Username is required';
-        if (!password) formErrors.password = 'Password is required';
+        if (!password) {
+            formErrors.password = 'Password is required';
+        } else if (!isValidPassword(password)) {
+            formErrors.password = 'Password must be at least 8 characters, contain at least 1 uppercase letter and 1 number';
+        }
         if (!securityQuestion) formErrors.securityQuestion = 'Please select a security question';
         if (!securityAnswer) formErrors.securityAnswer = 'Security answer is required';
         return formErrors;
@@ -34,6 +44,7 @@ const Register = (props) => {
 
     const clearErrors = () => {
         setErrors({});
+        setApiErrorMessage('');
     };
 
     const handleSubmit = (e) => {
@@ -70,12 +81,12 @@ const Register = (props) => {
         .catch(function (error) {
             // Handle errors
             if (error.response && error.response.data) {
-                showFailureReport('Error', error.response.data.message);
+                setApiErrorMessage(error.response.data.message);
                 if (error.response.data.errors) {
                     setErrors(error.response.data.errors);
                 }
             } else {
-                showFailureReport('Error', 'Something went wrong');
+                setApiErrorMessage('Something went wrong');
             }
         });
     };
@@ -164,6 +175,12 @@ const Register = (props) => {
                                 />
                                 {errors.securityAnswer && <p className="text-red-500 text-sm">{errors.securityAnswer}</p>}
                             </div>
+
+                            {apiErrorMessage && (
+                                <div className="text-center text-red-500 mb-3">
+                                    {apiErrorMessage}
+                                </div>
+                            )}
 
                             <div className="my-2 w-1/2 lg:w-2/4 mt-5 mx-auto">
                                 <button

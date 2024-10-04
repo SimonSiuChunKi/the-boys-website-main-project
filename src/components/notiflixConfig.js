@@ -12,7 +12,7 @@ export const showSuccessReport = (title, message, callback) => {
     Notiflix.Report.success(title, message, 'Okay', callback);
 };
 
-export const showFailureReport = (title, message, callback) => {
-    initializeNotiflix();
-    Notiflix.Report.failure(title, message, 'Okay', callback);
-};
+// export const showFailureReport = (title, message, callback) => {
+//     initializeNotiflix();
+//     Notiflix.Report.failure(title, message, 'Okay', callback);
+// };

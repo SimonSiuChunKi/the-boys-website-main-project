@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import NavBar from '../components/Navbar/NavBar';
 import Footer from '../components/Footer';
 import {useDocTitle} from '../components/CustomHook';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { showSuccessReport, showFailureReport } from '../components/notiflixConfig';
+import { showSuccessReport } from '../components/notiflixConfig';
 
 
 const ResetPassword = (props) => {
@@ -15,6 +15,7 @@ const ResetPassword = (props) => {
     const [password, setPassword] = useState('');
     const [reenteredPassword, setReenteredPassword] = useState('');
     const [errors, setErrors] = useState({});
+    const [apiErrorMessage, setApiErrorMessage] = useState('');    
 
     const validateForm = () => {
         let formErrors = {};
@@ -28,6 +29,7 @@ const ResetPassword = (props) => {
 
     const clearErrors = () => {
         setErrors({});
+        setApiErrorMessage('');
     };
 
     const handleSubmit = (e) => {
@@ -61,12 +63,12 @@ const ResetPassword = (props) => {
         .catch(function (error) {
             // Handle errors
             if (error.response && error.response.data) {
-                showFailureReport('Error', error.response.data.message);
+                setApiErrorMessage(error.response.data.message);
                 if (error.response.data.errors) {
                     setErrors(error.response.data.errors);
                 }
             } else {
-                showFailureReport('Error', 'Something went wrong');
+                setApiErrorMessage('Something went wrong');
             }
         });
     };
@@ -117,6 +119,12 @@ const ResetPassword = (props) => {
                                     {errors.match && <p className="text-red-500 text-sm">{errors.match}</p>}
                                 </div>
                             </div>
+
+                            {apiErrorMessage && (
+                                <div className="text-center text-red-500 mb-3">
+                                    {apiErrorMessage}
+                                </div>
+                            )}
 
                             <div className="my-2 w-full lg:w-2/4 mt-5 mx-auto">
                                 <button

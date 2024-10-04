@@ -5,10 +5,11 @@ import {useDocTitle} from '../components/CustomHook';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { isAuthenticated } from '../components/Auth';
-import { showSuccessReport, showFailureReport } from '../components/notiflixConfig';
+import { showSuccessReport } from '../components/notiflixConfig';
 import { setCookie, getCookie } from '../components/CookieManage';
 
 const Login = (props) => {
+    const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
     useEffect(() => {
         if (isAuthenticated()) {
@@ -33,6 +34,7 @@ const Login = (props) => {
 
     const clearErrors = () => {
         setErrors({});
+        setErrorMessage('');
     };
 
     const handleSubmit = (e) => {
@@ -76,12 +78,12 @@ const Login = (props) => {
         .catch(function (error) {
             // Handle errors
             if (error.response && error.response.data) {
-                showFailureReport('Error', error.response.data.message);
+                setErrorMessage(error.response.data.message);
                 if (error.response.data.errors) {
                     setErrors(error.response.data.errors);
                 }
             } else {
-                showFailureReport('Error', 'Something went wrong');
+                setErrorMessage('Something went wrong');
             }
         });
     };
@@ -134,6 +136,12 @@ const Login = (props) => {
                                     {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
                                 </div>
                             </div>
+
+                            {errorMessage && (
+                                <div style={{ color: 'red', marginBottom: '10px' }} className="text-center">
+                                    {errorMessage}
+                                </div>
+                            )}
 
                             <div className="my-2 w-full lg:w-2/4 mt-5 mx-auto">
                                 <button
