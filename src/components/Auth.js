@@ -1,11 +1,14 @@
 import { showSuccessReport } from '../components/notiflixConfig';
+import { deleteCookie, getCookie } from '../components/CookieManage';
+
 export const isAuthenticated = () => {
-    return !!localStorage.getItem('accessToken');
+    return !!getCookie('accessToken');
 }
 export const handleLogout = (navigate) => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('idToken');
-    localStorage.removeItem('refreshToken');
+    deleteCookie('accessToken');
+    deleteCookie('idToken');
+    deleteCookie('refreshToken');
+    deleteCookie('userId');
     showSuccessReport('Successfully Logged Out', 'Hope to see you again!')
     navigate('/login');
 };

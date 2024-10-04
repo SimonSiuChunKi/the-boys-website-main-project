@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { isAuthenticated } from '../components/Auth';
 import { showSuccessReport, showFailureReport } from '../components/notiflixConfig';
-
+import { setCookie, getCookie } from '../components/CookieManage';
 
 const Login = (props) => {
     const navigate = useNavigate();
@@ -28,6 +28,8 @@ const Login = (props) => {
         if (!password) formErrors.password = 'Password is required';
             return formErrors;
     };
+
+
 
     const clearErrors = () => {
         setErrors({});
@@ -58,12 +60,14 @@ const Login = (props) => {
         })
         .then(function (response) {
             if (response && response.data) {
-                const { accessToken, idToken, refreshToken } = response.data;
+                const { accessToken, idToken, refreshToken, userId} = response.data;
 
                 // Token hndling
-                localStorage.setItem('accessToken', accessToken);
-                localStorage.setItem('idToken', idToken);
-                localStorage.setItem('refreshToken', refreshToken);
+                setCookie('accessToken', accessToken, 7);
+                setCookie('idToken', idToken, 7);
+                setCookie('refreshToken', refreshToken, 7);
+                setCookie('userId', userId, 7);
+                console.log(getCookie('userId'));
 
                 showSuccessReport('Success', response.data.message);
                 navigate('/');
