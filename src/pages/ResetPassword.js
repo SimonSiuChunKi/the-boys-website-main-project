@@ -3,30 +3,27 @@ import NavBar from '../components/Navbar/NavBar';
 import Footer from '../components/Footer';
 import {useDocTitle} from '../components/CustomHook';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
-import { isAuthenticated } from '../components/Auth';
+import { useNavigate } from 'react-router-dom';
 import { showSuccessReport, showFailureReport } from '../components/notiflixConfig';
 
 
-const Login = (props) => {
+const ResetPassword = (props) => {
     const navigate = useNavigate();
-    useEffect(() => {
-        if (isAuthenticated()) {
-            navigate('/');
-        }
-    }, [navigate]);
 
-    useDocTitle('Login - Sign-Connect');
-
-    const [username, setUsername] = useState('');
+    useDocTitle('Reset Password - Sign-Connect');
+    
     const [password, setPassword] = useState('');
+    const [reenteredPassword, setReenteredPassword] = useState('');
     const [errors, setErrors] = useState({});
 
     const validateForm = () => {
         let formErrors = {};
-        if (!username) formErrors.username = 'Username is required';
         if (!password) formErrors.password = 'Password is required';
-            return formErrors;
+        if (!reenteredPassword) formErrors.reenteredPassword = 'Please re-enter your password';
+        if (password && reenteredPassword && password !== reenteredPassword) {
+            formErrors.match = 'Passwords do not match';
+        }    
+        return formErrors;
     };
 
     const clearErrors = () => {
@@ -42,7 +39,6 @@ const Login = (props) => {
         }
 
         const formData = {
-            username: username,
             password: password
         };
 
@@ -50,7 +46,7 @@ const Login = (props) => {
 
         axios({
             method: 'post',
-            url: 'https://g3ywl1bwh3.execute-api.ap-southeast-2.amazonaws.com/prod/login',
+            url: 'https://g3ywl1bwh3.execute-api.ap-southeast-2.amazonaws.com/prod/forgotPassword',
             data: formData,
             headers: {
                 'Content-Type': 'application/json',
@@ -58,15 +54,8 @@ const Login = (props) => {
         })
         .then(function (response) {
             if (response && response.data) {
-                const { accessToken, idToken, refreshToken } = response.data;
-
-                // Token hndling
-                localStorage.setItem('accessToken', accessToken);
-                localStorage.setItem('idToken', idToken);
-                localStorage.setItem('refreshToken', refreshToken);
-
                 showSuccessReport('Success', response.data.message);
-                navigate('/');
+                navigate('/login');
             }
         })
         .catch(function (error) {
@@ -88,39 +77,21 @@ const Login = (props) => {
                 <NavBar />
             </div>
             <div id='login' className="mt-8 w-full bg-white py-12 lg:py-24" style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
-                <div className="my-4" data-aos="zoom-in">
+                <div className="container mx-auto my-8 px-4 lg:px-20" data-aos="zoom-in" style={{ maxWidth: '700px' }} >
                     <form onSubmit={handleSubmit} id="loginForm">
                         <div className="w-full bg-white p-8 my-4 md:px-12 lg:w-full lg:pl-30 lg:pr-30 mr-auto rounded-2xl shadow-2xl">
                             <div className="flex">
-                                <h1 className="font-bold text-center lg:text-left text-blue-900 uppercase text-4xl mx-auto">Login</h1>
+                                <h1 className="font-bold text-center lg:text-left text-black-900 uppercase text-3xl mx-auto">Reset Your Password</h1>
                             </div>
-
+                            <hr className="my-4 border-gray-300" />
                             <div className="grid grid-cols-1 gap-5 mt-5 ">
                                 <div>
-                                    <label htmlFor="username" className="text-gray-700">Username:</label>
-                                    <input
-                                        name="username"
-                                        className="w-full lg:w-full bg-gray-100 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline"
-                                        type="text"
-                                        placeholder="Enter Username*"
-                                        value={username}
-                                        onChange={(e) => {
-                                            setUsername(e.target.value);
-                                            clearErrors();
-                                        }}
-                                    />
-                                    {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
-                                </div>
-                            </div>
-                                
-                            <div className="grid grid-cols-1 gap-5 mt-5">
-                                <div>
-                                    <label htmlFor="password" className="text-gray-700">Password:</label>
+                                    <label htmlFor="password" className="text-gray-700">Enter a new password:</label>
                                     <input
                                         name="password"
-                                        className="w-full lg:w-full bg-gray-100 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline"
+                                        className="w-full bg-gray-100 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline"
                                         type="password"
-                                        placeholder="Enter Password*"
+                                        placeholder="Enter New Password*"
                                         value={password}
                                         onChange={(e) => {
                                             setPassword(e.target.value);
@@ -128,6 +99,22 @@ const Login = (props) => {
                                         }}
                                     />
                                     {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+                                </div>
+                                <div>
+                                    <label htmlFor="reenteredPassword" className="text-gray-700">Re-enter the password:</label>
+                                    <input
+                                        name="reenteredPassword"
+                                        className="w-full bg-gray-100 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline"
+                                        type="password"
+                                        placeholder="Re-enter Password*"
+                                        value={reenteredPassword}
+                                        onChange={(e) => {
+                                            setReenteredPassword(e.target.value);
+                                            clearErrors();
+                                        }}
+                                    />
+                                    {errors.reenteredPassword  && <p className="text-red-500 text-sm">{errors.reenteredPassword }</p>}
+                                    {errors.match && <p className="text-red-500 text-sm">{errors.match}</p>}
                                 </div>
                             </div>
 
@@ -137,25 +124,11 @@ const Login = (props) => {
                                     id="submitBtn"
                                     className="uppercase text-sm font-bold tracking-wide bg-gray-500 hover:bg-blue-900 text-gray-100 p-3 rounded-lg w-full focus:outline-none focus:shadow-outline"
                                 >
-                                    Sign In
+                                    Submit
                                 </button>
                             </div>
-
-                            <div className="flex justify-center items-center my-2">
-                                <Link to="/forgot-password" className="flex justify-center text-gray-500 hover:text-blue-500 focus:outline-none text-sm">
-                                    Forgotten Password?
-                                </Link>                                
-                            </div>
-                            
-                            <hr className="my-4 border-gray-300" />
-                            <div className="flex justify-center items-center my-4">
-                                <Link to="/register" className="uppercase text-sm font-bold tracking-wide bg-gray-500 hover:bg-green-900 text-gray-100 p-3 rounded-lg focus:outline-none focus:shadow-outline">
-                                    Create new account
-                                </Link>
-                            </div>
                         </div>
-                    </form>
-                    
+                    </form>                    
                 </div>
             </div>
             <Footer />
@@ -163,4 +136,4 @@ const Login = (props) => {
     );
 };
 
-export default Login;
+export default ResetPassword;
