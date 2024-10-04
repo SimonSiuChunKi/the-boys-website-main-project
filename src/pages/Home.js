@@ -6,6 +6,7 @@ import Intro from '../components/Intro';
 import SignLibrary from '../components/SignLibrary';
 import Courses from '../components/Courses';
 import { AuthProvider } from '../components/AuthContext';
+import { isAuthenticated } from '../components/Auth';
 
 
 
@@ -13,11 +14,13 @@ const Home = () => {
     return (
         <>
             <AuthProvider>
+                { !isAuthenticated() && <Hero /> }
                 <Hero />
                 <Intro />
                 <Courses />
                 <SignLibrary />
                 <Cta/>
+                
                 <Footer />
             </AuthProvider>
         </>
