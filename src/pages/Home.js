@@ -15,12 +15,10 @@ const Home = () => {
         <>
             <AuthProvider>
                 { !isAuthenticated() && <Hero /> }
-                <Hero />
                 <Intro />
                 <Courses />
                 <SignLibrary />
-                <Cta/>
-                
+                <Cta/>                
                 <Footer />
             </AuthProvider>
         </>
