@@ -68,13 +68,10 @@ const ForgotPassword = (props) => {
             setErrors(formErrors);
             return;
         }
-
-        console.log('Executing reCAPTCHA');
         recaptchaRef.current.execute();
     };
 
     const handleRecaptchaChange = () => {
-        console.log('reCAPTCHA completed');
         const formData = {
             username: username,
             "custom:security-question": securityQuestion,

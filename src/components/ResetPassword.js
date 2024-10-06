@@ -3,20 +3,22 @@ import NavBar from './Navbar/NavBar';
 import Footer from './Footer';
 import {useDocTitle} from './CustomHook';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { showSuccessReport } from './notiflixConfig';
 import { getCookie } from './CookieManage';
+import ReCAPTCHA from 'react-google-recaptcha';
+
+const RECAPTCHA_SITE_KEY = '6LcCN1kqAAAAAD8WSnLa5cZCirN_udQVvfWkpPDg';
 
 const ResetPassword = (props) => {
-    const navigate = useNavigate();
-
     useDocTitle('Reset Password - Sign-Connect');
-    
+
+    const username = getCookie('cognitoUsername');  
     const [password, setPassword] = useState('');
     const [reenteredPassword, setReenteredPassword] = useState('');
     const [errors, setErrors] = useState({});
     const [apiErrorMessage, setApiErrorMessage] = useState('');
-    const username = getCookie('cognitoUsername');  
+    const [recaptchaToken, setRecaptchaToken] = useState('');
+    
 
     const validateForm = () => {
         let formErrors = {};
@@ -28,9 +30,19 @@ const ResetPassword = (props) => {
         return formErrors;
     };
 
+    const handleRecaptchaChange = (token) => {
+        setRecaptchaToken(token);
+    };
+
     const clearErrors = () => {
         setErrors({});
         setApiErrorMessage('');
+    };
+
+    const clearForm = () => {
+        setPassword('');
+        setReenteredPassword('');
+        clearErrors();
     };
 
     const handleSubmit = (e) => {
@@ -39,6 +51,12 @@ const ResetPassword = (props) => {
         if (Object.keys(formErrors).length > 0) {
             setErrors(formErrors);
             return;
+        }
+        
+        // Stop form submission if reCAPTCHA is not check
+        if (!recaptchaToken) {
+            setApiErrorMessage('Please complete the reCAPTCHA to proceed.');
+            return;  
         }
 
         const formData = {
@@ -59,7 +77,7 @@ const ResetPassword = (props) => {
         .then(function (response) {
             if (response && response.data) {
                 showSuccessReport('Success', response.data.message);
-                navigate('/login');
+                clearForm();
             }
         })
         .catch(function (error) {
@@ -136,6 +154,13 @@ const ResetPassword = (props) => {
                                 >
                                     Submit
                                 </button>
+                            </div>
+
+                            <div className="flex justify-center mt-4">
+                                <ReCAPTCHA
+                                    sitekey={RECAPTCHA_SITE_KEY}
+                                    onChange={handleRecaptchaChange}
+                                />
                             </div>
                         </div>
                     </form>                    
