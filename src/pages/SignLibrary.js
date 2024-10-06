@@ -32,8 +32,6 @@ const SignLibrary = () => {
             <div className="flex justify-center items-center w-full bg-white py-12" id='Sign Library'>
                 <div className="container mx-auto">
                     
-                    
-
                     <div id="signs" className="bg-gray-100 py-12 mt-12">
                         <section data-aos="zoom-in-down">
                             <div className="my-4 py-4">
