@@ -39,13 +39,7 @@ const LessonDetails = () => {
   const loadONNXModel = async () => {
     try {
       // const session = await ort.InferenceSession.create('https://the-boys-bucket.s3.ap-southeast-2.amazonaws.com/models/model.onnx', 
-      const session = await ort.InferenceSession.create('/model.onnx', 
-        {executionProviders: ['wasm'],
-          wasm: {
-            wasmPaths: 'https://the-boys-bucket.s3.ap-southeast-2.amazonaws.com/models/ort-wasm-simd-threaded.wasm'
-          }
-        },
-      ); // Adjust the path accordingly
+      const session = await ort.InferenceSession.create('/model.onnx'); // Adjust the path accordingly
       sessionRef.current = session;
       console.log("ONNX Model loaded successfully");
     } catch (err) {
