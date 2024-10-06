@@ -232,7 +232,6 @@ const ForgotPassword = (props) => {
                     </form>
                     <ReCAPTCHA
                         sitekey={RECAPTCHA_SITE_KEY}
-                        size="invisible"
                         ref={recaptchaRef}
                         onChange={handleRecaptchaChange}
                     />
