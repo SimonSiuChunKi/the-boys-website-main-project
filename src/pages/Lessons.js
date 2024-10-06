@@ -95,7 +95,7 @@ const Lessons = () => {
                             />
                           </svg>
                         </button>
-                      ) : (
+                      ) : lesson.Status === "In Progress" ? (
                         <button
                           onClick={() => navigate(`/lesson/${lesson.ID}`)}
                           className="text-white bg-green-600 hover:bg-green-500 inline-flex items-center justify-center w-full px-6 py-3 my-4 text-lg shadow-xl rounded-xl"
@@ -109,7 +109,22 @@ const Lessons = () => {
                             />
                           </svg>
                         </button>
-                      )}
+                      ) : lesson.Status === "Completed" ? (
+                        // Show the "Review" button for completed lessons
+                        <button
+                          onClick={() => navigate(`/lesson/${lesson.ID}/review`)}
+                          className="text-white bg-yellow-600 hover:bg-yellow-500 inline-flex items-center justify-center w-full px-6 py-3 my-4 text-lg shadow-xl rounded-xl"
+                        >
+                          Review
+                          <svg className="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path
+                              fillRule="evenodd"
+                              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </button>
+                      ) : null}
                     </div>
                   ))}
                 </div>
