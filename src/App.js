@@ -13,7 +13,6 @@ import Home from './pages/Home';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
 import Lessons from './pages/Lessons';
 import LessonDetail from './pages/LessonDetails';
 import NotFound from './pages/NotFound';
@@ -50,7 +49,6 @@ function App() {
             <Route path="/register" element={<Register />} /> 
             <Route path="/login" element={<Login />} /> 
             <Route path="/forgot-password" element={<ForgotPassword />} /> 
-            <Route path="/reset-password" element={<ResetPassword />} /> 
             <Route path="/sign_library" element={<SignLibrary />} />
             <Route path="/hand_sign/:hand_sign" element={<Signs />} />
             <Route path='*' element={<NotFound />}/>

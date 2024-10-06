@@ -1,18 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import NavBar from '../components/Navbar/NavBar';
 import Footer from '../components/Footer';
 import {useDocTitle} from '../components/CustomHook';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { showSuccessReport } from '../components/notiflixConfig';
 import { isAuthenticated } from '../components/Auth';
+import ReCAPTCHA from 'react-google-recaptcha';
 
+const RECAPTCHA_SITE_KEY = '6LdK_FgqAAAAAKuoBJTZo75DOWnWs3wiJJ9TksDR';
 
 const ForgotPassword = (props) => {
     const navigate = useNavigate();
+    const recaptchaRef = useRef(null);
+
     useEffect(() => {
         if (isAuthenticated()) {
             navigate('/');
         }
+        const recaptchaScript = document.createElement('script');
+        recaptchaScript.src = "https://www.google.com/recaptcha/api.js";
+        recaptchaScript.async = true;
+        recaptchaScript.defer = true;
+        document.body.appendChild(recaptchaScript);
     }, [navigate]);
 
     useDocTitle('Forgotten Password - Sign-Connect');
@@ -23,11 +33,26 @@ const ForgotPassword = (props) => {
     const [errors, setErrors] = useState({});
     const [apiErrorMessage, setApiErrorMessage] = useState('');
 
+    const [password, setPassword] = useState('');
+    const [reenteredPassword, setReenteredPassword] = useState('');
+
+    const isValidPassword = (password) => {
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
+        return passwordRegex.test(password);
+    };
+
     const validateForm = () => {
         let formErrors = {};
         if (!username) formErrors.username = 'Username is required';
         if (!securityQuestion) formErrors.securityQuestion = 'Please select a security question';
         if (!securityAnswer) formErrors.securityAnswer = 'Security answer is required';
+        if (!password) formErrors.password = 'Password is required';
+        if (!reenteredPassword) formErrors.reenteredPassword = 'Please re-enter your password';
+        if (password && reenteredPassword && password !== reenteredPassword) {
+            formErrors.match = 'Passwords do not match';
+        }  else if (!isValidPassword(password)) {
+            formErrors.password = 'Password must be at least 8 characters, contain at least 1 uppercase letter and 1 number';
+        }
             return formErrors;
     };
 
@@ -44,10 +69,17 @@ const ForgotPassword = (props) => {
             return;
         }
 
+        console.log('Executing reCAPTCHA');
+        recaptchaRef.current.execute();
+    };
+
+    const handleRecaptchaChange = () => {
+        console.log('reCAPTCHA completed');
         const formData = {
             username: username,
             "custom:security-question": securityQuestion,  
-            "custom:security-answer": securityAnswer
+            "custom:security-answer": securityAnswer,
+            password: password
         };
 
         clearErrors();
@@ -62,8 +94,8 @@ const ForgotPassword = (props) => {
         })
         .then(function (response) {
             if (response && response.data) {
-                const token = response.data.token;
-                navigate(`/reset-password?username=${username}&token=${token}`);
+                showSuccessReport('Success', response.data.message);
+                navigate('/login');
             }
         })
         .catch(function (error) {
@@ -147,6 +179,40 @@ const ForgotPassword = (props) => {
                                 {errors.securityAnswer && <p className="text-red-500 text-sm">{errors.securityAnswer}</p>}
                             </div>      
 
+                            <div className="grid grid-cols-1 gap-5 mt-5 ">
+                                <div>
+                                    <label htmlFor="password" className="text-gray-700">Enter a new password:</label>
+                                    <input
+                                        name="password"
+                                        className="w-full bg-gray-100 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline"
+                                        type="password"
+                                        placeholder="Enter New Password*"
+                                        value={password}
+                                        onChange={(e) => {
+                                            setPassword(e.target.value);
+                                            clearErrors();
+                                        }}
+                                    />
+                                    {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+                                </div>
+                                <div>
+                                    <label htmlFor="reenteredPassword" className="text-gray-700">Re-enter the password:</label>
+                                    <input
+                                        name="reenteredPassword"
+                                        className="w-full bg-gray-100 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline"
+                                        type="password"
+                                        placeholder="Re-enter Password*"
+                                        value={reenteredPassword}
+                                        onChange={(e) => {
+                                            setReenteredPassword(e.target.value);
+                                            clearErrors();
+                                        }}
+                                    />
+                                    {errors.reenteredPassword  && <p className="text-red-500 text-sm">{errors.reenteredPassword }</p>}
+                                    {errors.match && <p className="text-red-500 text-sm">{errors.match}</p>}
+                                </div>
+                            </div>
+
                             {apiErrorMessage && (
                                 <div className="text-center text-red-500 mb-3">
                                     {apiErrorMessage}
@@ -159,12 +225,17 @@ const ForgotPassword = (props) => {
                                     id="submitBtn"
                                     className="uppercase text-sm font-bold tracking-wide bg-gray-500 hover:bg-blue-900 text-gray-100 p-3 rounded-lg w-full focus:outline-none focus:shadow-outline"
                                 >
-                                    Search
+                                    Submit
                                 </button>
                             </div>
                         </div>
                     </form>
-                    
+                    <ReCAPTCHA
+                        sitekey={RECAPTCHA_SITE_KEY}
+                        size="invisible"
+                        ref={recaptchaRef}
+                        onChange={handleRecaptchaChange}
+                    />
                 </div>
             </div>
             <Footer />
