@@ -66,16 +66,14 @@ const Login = () => {
         })
         .then(function (response) {
             if (response && response.data) {
-                const { accessToken, idToken, refreshToken, userId} = response.data;
+                const { accessToken, idToken, refreshToken, userId, username: cognitoUsername } = response.data;
 
                 // Token hndling
                 setCookie('accessToken', accessToken, 7);
                 setCookie('idToken', idToken, 7);
                 setCookie('refreshToken', refreshToken, 7);
                 setCookie('userId', userId, 7);
-                console.log(getCookie('userId'));
-
-                // showSuccessReport('Success', response.data.message);
+                setCookie('cognitoUsername', cognitoUsername, 7);
                 navigate('/');
                 login();
             }
