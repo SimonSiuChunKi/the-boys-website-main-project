@@ -11,9 +11,11 @@ const Lessons = () => {
   const navigate = useNavigate(); // Hook for navigation
 
   useEffect(() => {
+    console.log(course_id);
+    console.log(getCookie('userId'));
     const fetchData = async () => {
-    //   const response = await fetch(`https://lnenem9b6b.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1/lessons/?course_id=${course_id}&user_id=${getCookie('userId')}`);
-      const response = await fetch(`http://localhost:8000/api/v1/lessons/?course_id=${course_id}&user_id=${getCookie('userId')}`);
+      const response = await fetch(`https://lnenem9b6b.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1/lessons/?course_id=${course_id}&user_id=${getCookie('userId')}`);
+    //   const response = await fetch(`http://localhost:8000/api/v1/lessons/?course_id=${course_id}&user_id=${getCookie('userId')}`);
       const data = await response.json();
       setLessons(data);
     };
@@ -21,8 +23,6 @@ const Lessons = () => {
   }, [course_id]);
 
   const handleStartLesson = async (lessonId, userId) => {
-    console.log(lessonId);
-    console.log(userId);
     try {
         // const response = await fetch(`https://lnenem9b6b.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1/lessons/?course_id=${course_id}&user_id=${getCookie('userId')}`);
       // Make an API request to start the lesson
