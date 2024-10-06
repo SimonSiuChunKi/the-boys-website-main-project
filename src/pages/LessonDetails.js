@@ -38,11 +38,7 @@ const LessonDetails = () => {
   // Load the ONNX model//
   const loadONNXModel = async () => {
     try {
-      const response = await fetch("https://the-boys-bucket.s3.ap-southeast-2.amazonaws.com/models/model.onnx");
-      const buffer = await response.arrayBuffer();
-      const obj = await WebAssembly.instantiate(buffer);
-      
-      const session = await ort.InferenceSession.create('https://the-boys-bucket.s3.ap-southeast-2.amazonaws.com/models/model.onnx'); // Adjust the path accordingly
+      const session = await ort.InferenceSession.create('https://the-boys-bucket.s3.ap-southeast-2.amazonaws.com/models/model.onnx', {executionProviders: ['wasm']}); // Adjust the path accordingly
       sessionRef.current = session;
       console.log("ONNX Model loaded successfully");
     } catch (err) {
