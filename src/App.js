@@ -55,6 +55,7 @@ function App() {
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/sign_library" element={<SignLibrary />} />
               <Route path="/hand_sign/:hand_sign" element={<Signs />} />
+              <Route path="/insight" element={<Insight />} />
               <Route path='*' element={<NotFound />} />
               <Route
                 path="/lessons/:course_id"
@@ -69,6 +70,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <LessonDetail />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/account-management"
+                element={
+                  <ProtectedRoute>
+                    <AccountManagement />
                   </ProtectedRoute>
                 }
               />

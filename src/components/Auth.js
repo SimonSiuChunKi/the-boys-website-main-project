@@ -12,6 +12,7 @@ export const handleLogout = (navigate, logout) => {
     deleteCookie('idToken');
     deleteCookie('refreshToken');
     deleteCookie('userId');
+    deleteCookie('cognitoUsername');
     logout(); // Call the logout function from AuthContext to update isLoggedIn state
     showSuccessReport('Successfully Logged Out', 'Hope to see you again!');
     navigate('/');
