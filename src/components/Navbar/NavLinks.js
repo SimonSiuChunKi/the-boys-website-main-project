@@ -4,18 +4,25 @@ import { useNavigate } from 'react-router-dom';
 import { isAuthenticated, handleLogout } from '../Auth';
 import { useAuth } from '../AuthContext';
 
+const scrollWithOffset = (el) => {
+    const yCoordinate = el.getBoundingClientRect().top + window.pageYOffset;
+    const yOffset = -50; // Adjust the value for the offset to match your navbar height
+    window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
+};
+
+
 const NavLinks = () => {
     const navigate = useNavigate();
     const { logout } = useAuth();
     return (
         <>
-            <HashLink className="px-4 font-extrabold text-gray-500 hover:text-blue-900" smooth to="/#about">
+            <HashLink className="px-4 font-extrabold text-gray-500 hover:text-blue-900" smooth to="/#about" scroll={el => scrollWithOffset(el)}>
                 About
             </HashLink>
-            <HashLink className="px-4 font-extrabold text-gray-500 hover:text-blue-900" smooth to="/#courses">
+            <HashLink className="px-4 font-extrabold text-gray-500 hover:text-blue-900" smooth to="/#courses" scroll={el => scrollWithOffset(el)}>
                 Courses
             </HashLink>
-            <HashLink className="px-4 font-extrabold text-gray-500 hover:text-blue-900" smooth to="/#signs">
+            <HashLink className="px-4 font-extrabold text-gray-500 hover:text-blue-900" smooth to="/#signs" scroll={el => scrollWithOffset(el)}>
                 Sign Library
             </HashLink>
             {!isAuthenticated() ? (

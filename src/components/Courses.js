@@ -4,6 +4,7 @@ import { useAuth } from '../components/AuthContext';
 import { getCookie } from '../components/CookieManage';
 
 
+
 const Courses = () => {
 
     // Initially show only 4 courses
@@ -30,10 +31,10 @@ const Courses = () => {
     }, []);
 
     return (
-        <div id="courses" className="bg-gray-100 py-12" >
+        <div id="courses" className="bg-gray-100 py-12">
             <section data-aos="zoom-in-down">
                 <div className="my-4 py-4">
-                    <h2 className="my-2 text-center text-3xl text-blue-900 uppercase font-bold">courses</h2>
+                    <h2 className="my-2 text-center text-3xl text-blue-900 uppercase font-bold;">courses</h2>
 
                     <div className='flex justify-center'>
                         <div className='w-24 border-b-4 border-blue-900'></div>
