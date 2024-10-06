@@ -29,7 +29,7 @@ const SignLibrary = () => {
                 <NavBar />
             </div>
 
-            <div className="flex justify-center items-center mt-8 w-full bg-white py-12 lg:py-24" id='Sign Library'>
+            <div className="flex justify-center items-center w-full bg-white py-12" id='Sign Library'>
                 <div className="container mx-auto">
                     
                     

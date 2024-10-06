@@ -19,8 +19,9 @@ import NotFound from './pages/NotFound';
 import SignLibrary from './pages/SignLibrary';
 import Signs from './pages/Sign';
 import ProtectedRoute from './components/ProtectedRoute';
-import {useDocTitle} from './components/CustomHook';
+import { useDocTitle } from './components/CustomHook';
 import ScrollToTop from './components/ScrollToTop';
+import { AuthProvider } from './components/AuthContext';
 
 function App() {
   useEffect(() => {
