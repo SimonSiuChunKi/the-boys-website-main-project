@@ -24,8 +24,10 @@ const Lessons = () => {
     console.log(lessonId);
     console.log(userId);
     try {
+        // const response = await fetch(`https://lnenem9b6b.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1/lessons/?course_id=${course_id}&user_id=${getCookie('userId')}`);
       // Make an API request to start the lesson
-      const response = await axios.post('http://localhost:8000/api/v1/lessons/start_a_lesson', {
+      const response = await axios.post('https://lnenem9b6b.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1/lessons/start_a_lesson', {
+    //   const response = await axios.post('http://localhost:8000/api/v1/lessons/start_a_lesson', {
         lesson_id: lessonId,
         user_id: userId,
       });
