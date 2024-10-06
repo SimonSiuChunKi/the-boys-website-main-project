@@ -7,10 +7,14 @@ import { useNavigate, Link } from 'react-router-dom';
 import { isAuthenticated } from '../components/Auth';
 import { showSuccessReport } from '../components/notiflixConfig';
 import { setCookie, getCookie } from '../components/CookieManage';
+import { useAuth } from '../components/AuthContext';
 
-const Login = (props) => {
+const Login = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
+
+    const { login } = useAuth();
+    
     useEffect(() => {
         if (isAuthenticated()) {
             navigate('/');
@@ -71,9 +75,11 @@ const Login = (props) => {
                 setCookie('userId', userId, 7);
                 console.log(getCookie('userId'));
 
-                showSuccessReport('Success', response.data.message);
+                // showSuccessReport('Success', response.data.message);
                 navigate('/');
+                login();
             }
+            
         })
         .catch(function (error) {
             // Handle errors

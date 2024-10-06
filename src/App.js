@@ -20,8 +20,9 @@ import NotFound from './pages/NotFound';
 import SignLibrary from './pages/SignLibrary';
 import Signs from './pages/Sign';
 import ProtectedRoute from './components/ProtectedRoute';
-import {useDocTitle} from './components/CustomHook';
+import { useDocTitle } from './components/CustomHook';
 import ScrollToTop from './components/ScrollToTop';
+import { AuthProvider } from './components/AuthContext';
 
 function App() {
   useEffect(() => {
@@ -42,37 +43,39 @@ function App() {
 
   return (
     <>
-      <Router>
-        <ScrollToTop>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            {/* <Route path="/contact" element={<Contact />} /> */}
-            <Route path="/register" element={<Register />} /> 
-            <Route path="/login" element={<Login />} /> 
-            <Route path="/forgot-password" element={<ForgotPassword />} /> 
-            <Route path="/reset-password" element={<ResetPassword />} /> 
-            <Route path="/sign_library" element={<SignLibrary />} />
-            <Route path="/hand_sign/:hand_sign" element={<Signs />} />
-            <Route path='*' element={<NotFound />}/>
-            <Route 
-              path="/lessons/:course_id" 
-              element={
-                <ProtectedRoute>
-                  <Lessons />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/lesson/:lesson_id" 
-              element={
-                <ProtectedRoute>
-                  <LessonDetail />
-                </ProtectedRoute>
-              } 
-            />
-          </Routes>
-        </ScrollToTop>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <ScrollToTop>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              {/* <Route path="/contact" element={<Contact />} /> */}
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/sign_library" element={<SignLibrary />} />
+              <Route path="/hand_sign/:hand_sign" element={<Signs />} />
+              <Route path='*' element={<NotFound />} />
+              <Route
+                path="/lessons/:course_id"
+                element={
+                  <ProtectedRoute>
+                    <Lessons />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/lesson/:lesson_id"
+                element={
+                  <ProtectedRoute>
+                    <LessonDetail />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </ScrollToTop>
+        </Router>
+      </AuthProvider>
     </>
   );
 }

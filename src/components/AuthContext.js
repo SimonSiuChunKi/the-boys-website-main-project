@@ -1,21 +1,24 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { getCookie } from './CookieManage'; // Assuming you're using cookies
 
-// Create the context
 const AuthContext = createContext();
 
-// Custom hook to use the AuthContext
 export const useAuth = () => useContext(AuthContext);
 
-// Provider component to wrap the app
 export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to store login status
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Function to log in
+  useEffect(() => {
+    const token = getCookie('accessToken'); // Or check localStorage
+    if (token) {
+      setIsLoggedIn(true); // Restore login state if token exists
+    }
+  }, []);
+
   const login = () => {
     setIsLoggedIn(true);
   };
 
-  // Function to log out
   const logout = () => {
     setIsLoggedIn(false);
   };

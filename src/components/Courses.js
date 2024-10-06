@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
+import { getCookie } from '../components/CookieManage';
 
 
 const Courses = () => {
@@ -23,6 +24,7 @@ const Courses = () => {
             //   const response = await fetch('http://localhost:8000/api/v1/courses/');
             const data = await response.json();
             setCourses(data);
+            console.log(getCookie(''));
         };
         fetchData();
     }, []);
@@ -41,19 +43,20 @@ const Courses = () => {
 
                 <div className="px-12" data-aos="fade-down" data-aos-delay="600">
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-
                         {courses.slice(0, visibleCourses).map((course, index) => (
                             <div
                                 key={index}
-                                className="bg-white transition-all ease-in-out duration-400 overflow-hidden text-gray-700 hover:bg-gray-500 hover:text-white rounded-lg shadow-2xl p-3 group"
+                                className="bg-white flex flex-col justify-between transition-all ease-in-out duration-400 overflow-hidden text-gray-700 hover:bg-gray-500 hover:text-white rounded-lg shadow-2xl p-3 group"
                             >
-                                <div className="m-2 text-justify text-sm">
+                                <div className="flex-grow m-2 text-justify text-sm">
                                     <img
                                         alt="card img"
                                         className="rounded-t group-hover:scale-[1.15] transition duration-1000 ease-in-out"
                                         src={course.ImageURL}
                                     />
-                                    <h2 className="font-semibold my-4 text-2xl text-center">{course.CourseName}</h2>
+                                    <h2 className="font-semibold my-4 text-2xl text-center">
+                                        {course.CourseName}
+                                    </h2>
                                     <p className="text-md font-medium">{course.Description}</p>
                                 </div>
                                 {/* {isLoggedIn ? (
@@ -61,15 +64,68 @@ const Courses = () => {
                                 ) : (
                                     <button onClick={login}>Login</button>
                                 )} */}
-                                <Link to={`/lessons/${course.ID}`} className="text-white bg-blue-900 hover:bg-blue-800 inline-flex items-center justify-center w-full px-6 py-3 my-4 text-lg shadow-xl rounded-xl">
+                                
+                                {isLoggedIn ? (
+                                    <Link
+                                    to={`/lessons/${course.ID}`}
+                                        className="text-white bg-blue-900 hover:bg-blue-800 inline-flex items-center justify-center w-full px-6 py-3 mt-4 text-lg shadow-xl rounded-xl"
+                                    >
+                                        Learn more
+                                        <svg
+                                            className="w-4 h-4 ml-1"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20"
+                                            fill="currentColor"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                                                clipRule="evenodd"
+                                            ></path>
+                                        </svg>
+                                    </Link>
+                                ) : (
+                                    <Link
+                                        to={'/register'}
+                                        className="text-white bg-blue-900 hover:bg-blue-800 inline-flex items-center justify-center w-full px-6 py-3 mt-4 text-lg shadow-xl rounded-xl"
+                                    >
+                                        Join Us
+                                        <svg
+                                            className="w-4 h-4 ml-1"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20"
+                                            fill="currentColor"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                                                clipRule="evenodd"
+                                            ></path>
+                                        </svg>
+                                    </Link>
+                                )}
+                                {/* <Link
+                                    to={`/lessons/${course.ID}`}
+                                    className="text-white bg-blue-900 hover:bg-blue-800 inline-flex items-center justify-center w-full px-6 py-3 mt-4 text-lg shadow-xl rounded-xl"
+                                >
                                     Learn more
-                                    <svg className="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"></path>
+                                    <svg
+                                        className="w-4 h-4 ml-1"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20"
+                                        fill="currentColor"
+                                    >
+                                        <path
+                                            fillRule="evenodd"
+                                            d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                                            clipRule="evenodd"
+                                        ></path>
                                     </svg>
-                                </Link>
+                                </Link> */}
                             </div>
                         ))}
                     </div>
+
                     {/* Show the Load More button if there are more lessons to display */}
                     {visibleCourses < courses.length && (
                         <div className="flex justify-center mt-12 text-l">

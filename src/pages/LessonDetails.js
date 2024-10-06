@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import * as ort from 'onnxruntime-web';  // ONNX Runtime for running the model
 import { Camera } from '@mediapipe/camera_utils'; // Import Camera correctly from mediapipe
 import { Holistic } from '@mediapipe/holistic'; // Mediapipe Holistic import
+import { getCookie } from '../components/CookieManage';
 
 const LessonDetails = () => {
   const { lesson_id } = useParams();
@@ -22,13 +23,17 @@ const LessonDetails = () => {
   useEffect(() => {
     // Fetch Auslan signs using the lesson_id from the route params
     const fetchSigns = async () => {
-      const response = await fetch(`https://lnenem9b6b.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1/lessons/get_lesson_details?lesson_id=${lesson_id}`);
+      // const response = await fetch(`https://lnenem9b6b.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1/lessons/get_lesson_details?lesson_id=${lesson_id}`);
+      const response = await fetch(`http://localhost:8000/api/v1/lessons/get_lesson_details?lesson_id=${lesson_id}&user_id=${getCookie('userId')}`);
       const data = await response.json();
       setAuslanSigns(data);
       setSelectedSign(data[0]);
     };
     fetchSigns();
   }, [lesson_id]);
+
+  // Find the first sign with status 'In Progress'
+  const firstInProgressIndex = auslanSigns.findIndex(sign => sign.status === "In Progress");
 
   // Load the ONNX model//
   const loadONNXModel = async () => {
@@ -184,6 +189,11 @@ const LessonDetails = () => {
     return <div>Loading...</div>;
   }
 
+  // const handleContinueLesson = (lessonId) => {
+  //   // Directly navigate to the lesson details page
+  //   navigate(`/lesson/${lessonId}`);
+  // };
+
   return (
     <>
       <div className="flex justify-center items-center mt-8 w-full bg-white py-12 lg:py-24" id='lessonDetails'>
@@ -199,9 +209,16 @@ const LessonDetails = () => {
               {auslanSigns.map((sign, index) => (
                 <li
                   key={index}
-                  className={`cursor-pointer px-4 py-2 border ${selectedSign?.auslan_sign === sign.auslan_sign ? 'bg-blue-500 text-white' : 'bg-gray-200'
-                    }`}
-                  onClick={() => setSelectedSign(sign)}
+                  className={`cursor-pointer px-4 py-2 border ${selectedSign?.auslan_sign === sign.auslan_sign ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                  onClick={() => {
+                    if (index <= firstInProgressIndex) {
+                      setSelectedSign(sign);
+                    }
+                  }}
+                  style={{
+                    opacity: index > firstInProgressIndex ? 0.5 : 1,  // Gray out the buttons after the first 'In Progress'
+                    pointerEvents: index > firstInProgressIndex ? 'none' : 'auto' // Disable interaction for grayed-out buttons
+                  }}
                 >
                   {sign.auslan_sign}
                 </li>
@@ -265,3 +282,7 @@ const LessonDetails = () => {
 };
 
 export default LessonDetails;
+
+
+
+// const response = await fetch(`https://lnenem9b6b.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1/lessons/get_lesson_details?lesson_id=${lesson_id}`);
