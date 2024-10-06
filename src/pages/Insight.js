@@ -26,6 +26,7 @@ const Insight = () => {
                             <iframe 
                                 frameBorder="0" 
                                 scrolling="no" 
+                                title="Where do Auslan Users Live?"
                                 style={{ width: '100%', minHeight: '1005px' }} 
                                 src="https://www.sbs.com.au/census-explorer-2021/?languages=auslan&topic=cultural-diversity&lang=en&embed=where-do-people-live">
                                 Sorry your browser does not support inline frames.
@@ -54,6 +55,7 @@ const Insight = () => {
                             <iframe 
                                 frameBorder="0" 
                                 scrolling="no" 
+                                title="Age and Gender of Auslan Users"
                                 style={{ width: '50%', minHeight: '1005px' }} 
                                 src="https://www.sbs.com.au/census-explorer-2021/?lang=en&languages=auslan&topic=cultural-diversity&embed=how-old-are-people">
                                 Sorry your browser does not support inline frames.
@@ -61,6 +63,7 @@ const Insight = () => {
                             <iframe 
                                 frameBorder="0" 
                                 scrolling="no" 
+                                title="Income Details of Auslan Users"
                                 style={{ width: '50%', minHeight: '1005px' }} 
                                 src="https://www.sbs.com.au/census-explorer-2021/?lang=en&languages=auslan&topic=work-and-income&embed=what-are-peoples-annual-personal-incomes">
                                 Sorry your browser does not support inline frames.
@@ -89,6 +92,7 @@ const Insight = () => {
                             <iframe 
                                 frameBorder="0" 
                                 scrolling="no" 
+                                title="Education Levels of Auslan Users"
                                 style={{ width: '50%', minHeight: '1005px' }} 
                                 src="https://www.sbs.com.au/census-explorer-2021/?lang=en&languages=auslan&topic=education&embed=what-level-of-education-do-people-have">
                                 Sorry your browser does not support inline frames.
@@ -96,6 +100,7 @@ const Insight = () => {
                             <iframe 
                                 frameBorder="0" 
                                 scrolling="no" 
+                                title="Industries Where Auslan Users Work"
                                 style={{ width: '50%', minHeight: '1005px' }} 
                                 src="https://www.sbs.com.au/census-explorer-2021/?lang=en&languages=auslan&topic=work-and-income&embed=what-industries-do-people-typically-work-in">
                                 Sorry your browser does not support inline frames.
