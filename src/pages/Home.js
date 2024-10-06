@@ -17,7 +17,7 @@ const Home = () => {
                 <Intro />
                 <Courses />
                 <SignLibrary />
-                <Cta/>                
+                {/* <Cta/>                 */}
                 <Footer />
             </AuthProvider>
         </>
