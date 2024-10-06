@@ -23,8 +23,8 @@ const LessonDetails = () => {
   useEffect(() => {
     // Fetch Auslan signs using the lesson_id from the route params
     const fetchSigns = async () => {
-      // const response = await fetch(`https://lnenem9b6b.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1/lessons/get_lesson_details?lesson_id=${lesson_id}`);
-      const response = await fetch(`http://localhost:8000/api/v1/lessons/get_lesson_details?lesson_id=${lesson_id}&user_id=${getCookie('userId')}`);
+      const response = await fetch(`https://lnenem9b6b.execute-api.ap-southeast-2.amazonaws.com/prod/api/v1/lessons/get_lesson_details?lesson_id=${lesson_id}&user_id=${getCookie('userId')}`);
+      // const response = await fetch(`http://localhost:8000/api/v1/lessons/get_lesson_details?lesson_id=${lesson_id}&user_id=${getCookie('userId')}`);
       const data = await response.json();
       setAuslanSigns(data);
       setSelectedSign(data[0]);

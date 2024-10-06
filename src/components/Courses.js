@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
-import { getCookie } from '../components/CookieManage';
-
 
 
 const Courses = () => {
@@ -25,7 +23,6 @@ const Courses = () => {
             //   const response = await fetch('http://localhost:8000/api/v1/courses/');
             const data = await response.json();
             setCourses(data);
-            console.log(getCookie(''));
         };
         fetchData();
     }, []);
