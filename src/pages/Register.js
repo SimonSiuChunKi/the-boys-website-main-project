@@ -150,6 +150,9 @@ const Register = (props) => {
                                     {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
                                 </div>
                             </div>
+                            <div className="mt-4 mb-6 text-center text-sm text-red-500 font-semibold">
+                                Please do not use real personal details as your username.
+                            </div>
 
                             <div className="my-4">
                                 <label htmlFor="securityQuestion" className="text-gray-700">Please select a security question</label>
